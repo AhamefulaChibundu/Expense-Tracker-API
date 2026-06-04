@@ -38,6 +38,47 @@ app.get('/expenses', (req, res) => {
   res.status(200).json(expenses);
 });
 
+app.post('/expenses', (req, res) => {
+    const { title, amount, category, date, reimbursed } = req.body;
+
+    // --- TASK 3: VALIDATION LOGIC ---
+    // Check if the required fields are completely missing
+    if (!title || !amount || !category || !date) {
+        return res.status(400).json({
+            error: "Bad Request",
+            message: "Missing data: 'title', 'amount', 'category', and 'date' fields are all required."
+        });
+    }
+
+    // Additional data type validation to prevent bad data types
+    if (typeof amount !== 'number' || amount <= 0) {
+        return res.status(400).json({
+            error: "Bad Request",
+            message: "Validation Error: 'amount' must be a positive number greater than 0."
+        });
+    }
+
+    // --- TASK 2: LOGIC TO CREATE EXPENSE ---
+    // Formulate the new expense object layout
+    const newExpense = {
+        id: expenses.length + 1, // Simple dynamic ID creation string
+        title,
+        amount,
+        category,
+        date,
+        reimbursed: reimbursed || false // Default setting to false if not explicitly provided
+    };
+
+    // Save the newly generated object into our records array tracker
+    expenses.push(newExpense);
+
+    // Respond back to client with success code 211 Created and the raw object layout
+    res.status(201).json({
+        message: "Expense created successfully!",
+        data: newExpense
+    });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
