@@ -38,6 +38,36 @@ app.get('/expenses', (req, res) => {
   res.status(200).json(expenses);
 });
 
+// GET REIMBURSED EXPENSES
+app.get('/expenses/reimbursed', (req, res) => {
+  const reimbursedExpenses = expenses.filter(
+    expense => expense.reimbursed
+  );
+
+  res.status(200).json(reimbursedExpenses);
+});
+
+// GET UNREIMBURSED EXPENSES
+app.get('/expenses/unreimbursed', (req, res) => {
+  const unreimbursedExpenses = expenses.filter(
+    expense => !expense.reimbursed
+  );
+
+  res.status(200).json(unreimbursedExpenses);
+});
+
+// GET TOTAL EXPENSES
+app.get('/expenses-total', (req, res) => {
+  const total = expenses.reduce(
+    (sum, expense) => sum + expense.amount,
+    0
+  );
+
+  res.status(200).json({
+    totalExpenses: total
+  });
+});
+
 // GET HIGH EXPENSES
 app.get('/expenses/high', (req, res) => {
   const highExpenses = expenses.filter(
