@@ -66,7 +66,7 @@ app.post('/expenses', (req, res) => {
         amount,
         category,
         date,
-        reimbursed: reimbursed || false // Default setting to false if not explicitly provided
+        reimbursed: reimbursed ?? false // Default setting to false if not explicitly provided
     };
 
     // Save the newly generated object into our records array tracker
