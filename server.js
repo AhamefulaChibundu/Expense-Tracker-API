@@ -79,6 +79,25 @@ app.post('/expenses', (req, res) => {
     });
 });
 
+// GET HIGH EXPENSES
+app.get('/expenses/high', (req, res) => {
+  const highExpenses = expenses.filter(
+    expense => expense.amount > 5000
+  );
+
+  res.status(200).json(highExpenses);
+});
+
+
+// ERROR HANDLER
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(500).json({
+    error: 'Server Error'
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
