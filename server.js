@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 let expenses = [
   {
     id: 1,
+    title: "Lunch",
     amount: 50000,
     category: 'Food',
     date: '2026-06-01',
@@ -16,6 +17,7 @@ let expenses = [
   },
   {
     id: 2,
+    title: "Cab Fare",
     amount: 3000,
     category: 'Transport',
     date: '2026-06-02',
@@ -23,6 +25,7 @@ let expenses = [
   },
   {
     id: 3,
+    title: "Dave's Rent",
     amount: 330000,
     category: 'Rent',
     date: '2026-06-03',
