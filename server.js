@@ -47,6 +47,30 @@ app.get('/expenses/high', (req, res) => {
   res.status(200).json(highExpenses);
 });
 
+// GET EXPENSES BY CATEGORY
+app.get('/expenses/category/:category', (req, res) => {
+  const category = req.params.category;
+
+  const filteredExpenses = expenses.filter(
+    expense =>
+      expense.category.toLowerCase() ===
+      category.toLowerCase()
+  );
+
+  res.status(200).json(filteredExpenses);
+});
+
+// GET EXPENSES BY DATE
+app.get('/expenses/date/:date', (req, res) => {
+  const date = req.params.date;
+
+  const expensesByDate = expenses.filter(
+    expense => expense.date === date
+  );
+
+  res.status(200).json(expensesByDate);
+});
+
 app.post('/expenses', (req, res) => {
     const { title, amount, category, date, reimbursed } = req.body;
 
