@@ -71,6 +71,24 @@ app.get('/expenses/date/:date', (req, res) => {
   res.status(200).json(expensesByDate);
 });
 
+// GET SINGLE EXPENSE
+app.get('/expenses/:id', (req, res) => {
+  const id = Number(req.params.id);
+
+  const expense = expenses.find(
+    expense => expense.id === id
+  );
+
+  if (!expense) {
+    return res.status(404).json({
+      error: 'Not Found',
+      message: 'Expense not found.'
+    });
+  }
+
+  res.status(200).json(expense);
+});
+
 app.post('/expenses', (req, res) => {
     const { title, amount, category, date, reimbursed } = req.body;
 
@@ -110,6 +128,41 @@ app.post('/expenses', (req, res) => {
         message: "Expense created successfully!",
         data: newExpense
     });
+});
+
+// PATCH EXPENSE
+app.patch('/expenses/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const expense = expenses.find(
+    expense => expense.id === id
+  );
+
+  if (!expense) {
+    return res.status(404).json({
+      error: 'Not Found',
+      message: 'Expense not found.'
+    });
+  }
+
+  const { title, amount, category, date, reimbursed } = req.body;
+
+  if (amount !== undefined && (typeof amount !== 'number' || amount <= 0)) {
+    return res.status(400).json({
+      error: 'Bad Request',
+      message: "Validation Error: 'amount' must be a positive number greater than 0."
+    });
+  }
+
+  if (title !== undefined) expense.title = title;
+  if (amount !== undefined) expense.amount = amount;
+  if (category !== undefined) expense.category = category;
+  if (date !== undefined) expense.date = date;
+  if (reimbursed !== undefined) expense.reimbursed = reimbursed;
+
+  res.status(200).json({
+    message: 'Expense updated successfully!',
+    data: expense
+  });
 });
 
 
