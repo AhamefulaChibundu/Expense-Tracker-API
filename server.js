@@ -38,6 +38,15 @@ app.get('/expenses', (req, res) => {
   res.status(200).json(expenses);
 });
 
+// GET HIGH EXPENSES
+app.get('/expenses/high', (req, res) => {
+  const highExpenses = expenses.filter(
+    expense => expense.amount > 5000
+  );
+
+  res.status(200).json(highExpenses);
+});
+
 app.post('/expenses', (req, res) => {
     const { title, amount, category, date, reimbursed } = req.body;
 
@@ -77,15 +86,6 @@ app.post('/expenses', (req, res) => {
         message: "Expense created successfully!",
         data: newExpense
     });
-});
-
-// GET HIGH EXPENSES
-app.get('/expenses/high', (req, res) => {
-  const highExpenses = expenses.filter(
-    expense => expense.amount > 5000
-  );
-
-  res.status(200).json(highExpenses);
 });
 
 
