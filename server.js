@@ -119,6 +119,7 @@ app.get('/expenses/:id', (req, res) => {
   res.status(200).json(expense);
 });
 
+// CREATE EXPENSE
 app.post('/expenses', (req, res) => {
     const { title, amount, category, date, reimbursed } = req.body;
 
@@ -195,6 +196,76 @@ app.patch('/expenses/:id', (req, res) => {
   });
 });
 
+// PUT EXPENSE (Full Update)
+app.put('/expenses/:id', (req, res) => {
+  const expense = expenses.find(
+    expense => expense.id === parseInt(req.params.id)
+  );
+
+  if (!expense) {
+    return res.status(404).json({
+      error: "Not Found",
+      message: "Expense not found"
+    });
+  }
+
+  const {
+    title,
+    amount,
+    category,
+    date,
+    reimbursed
+  } = req.body;
+
+  // Required fields validation
+  if (!title || !category || !date) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message:
+        "title, category and date are required"
+    });
+  }
+
+  // Amount validation
+  if (typeof amount !== "number" || amount <= 0) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message:
+        "amount must be a positive number"
+    });
+  }
+
+  // Full replacement
+  expense.title = title;
+  expense.amount = amount;
+  expense.category = category;
+  expense.date = date;
+  expense.reimbursed = reimbursed ?? false;
+
+  res.status(200).json({
+    message: "Expense updated successfully",
+    data: expense
+  });
+});
+
+// DELETE EXPENSE
+app.delete('/expenses/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+
+  const initialLength = expenses.length;
+
+  expenses = expenses.filter(
+    expense => expense.id !== id
+  );
+
+  if (expenses.length === initialLength) {
+    return res.status(404).json({
+      message: 'Expense not found'
+    });
+  }
+
+  res.status(204).send();
+});
 
 // ERROR HANDLER
 app.use((err, req, res, next) => {
